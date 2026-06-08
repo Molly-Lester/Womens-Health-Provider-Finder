@@ -20,3 +20,7 @@
 ### Saamiya Kudah
 - About me: I am 26 years old, grew up in the UK. 
 - Hobbies: I love reading, travelling and baking. 
+
+## Danielle Brereton-Smith
+- About me: I am 28 years old, from London.
+- Hobbies: I like to swim, knit, read, play sims and watch TV

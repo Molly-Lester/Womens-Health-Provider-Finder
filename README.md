@@ -17,4 +17,6 @@
 - About me: I'm 28 years old and I grew up in North Yorkshire. 
 - Hobbies: I love music, travelling and spending time with my miniature dachshund called Percy! 
 
-
+### Saamiya Kudah
+- About me: I am 26 years old, grew up in the UK. 
+- Hobbies: I love reading, travelling and baking. 

@@ -24,3 +24,7 @@
 ## Danielle Brereton-Smith
 - About me: I am 28 years old, from London.
 - Hobbies: I like to swim, knit, read, play sims and watch TV
+
+##  Tapiwa Chibagidi
+- About me: I am 25 years old, live in Birmingham
+- Hobbies: I love reading classic novels, weight lifting in the gym and enjoy a good British series :) 

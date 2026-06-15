@@ -11,8 +11,16 @@ export default function CategoryCards({ category, setCategory }) {
     ];
 
     return (
-        <div style={{ padding: "0 24px" }}>
-            <Text fw={600} mb="sm" size="xl">
+        <Paper
+            withBorder
+            radius="md"
+            p="xl"
+            style={{
+                margin: "0 24px",
+                backgroundColor: "#fff",
+            }}
+        >
+            <Text fw={600} mb="xl" size="xl" ta="center">
                 What brings you here today?
             </Text>
 
@@ -30,13 +38,11 @@ export default function CategoryCards({ category, setCategory }) {
                             backgroundColor: category === cat.name ? '#f5f3ff' : 'white',
                             transition: 'all 0.2s ease',
                         }}
-
                         onMouseEnter={(e) => {
                             if (category !== cat.name) {
                                 e.currentTarget.style.backgroundColor = '#fafafa';
                             }
                         }}
-
                         onMouseLeave={(e) => {
                             if (category !== cat.name) {
                                 e.currentTarget.style.backgroundColor = 'white';
@@ -50,6 +56,6 @@ export default function CategoryCards({ category, setCategory }) {
                     </Paper>
                 ))}
             </SimpleGrid>
-        </div>
+        </Paper>
     );
 }

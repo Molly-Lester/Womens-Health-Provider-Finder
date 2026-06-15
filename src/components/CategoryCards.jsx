@@ -1,54 +1,61 @@
+import { Text, Paper, SimpleGrid } from '@mantine/core';
+
 export default function CategoryCards({ category, setCategory }) {
     const categories = [
-        {
-            name: "General Women's Health",
-            description: "GP services, routine check-ups and general concerns"
-        },
-
-        {
-            name: "Family Planning",
-            description: " "
-        },
-
-        { 
-            name: "Sexual Health",
-            description: " "
-        },
-
-        {
-            name: "Fertility Services",
-            description: " "
-        },
-
-        {
-            name: "Pregnancy and Maternity",
-            description: " "
-        },
-
-        {
-            name: "Menopause Support",
-            description: " "
-        },
+        { name: "General Women's Health", description: "GP services, routine check-ups, and general health concerns" },
+        { name: "Family Planning & Contraception", description: "Support with contraception, pregnancy planning, and reproductive choices" },
+        { name: "Sexual Health", description: "Testing, treatment, and advice for sexual health and wellbeing" },
+        { name: "Fertility Support", description: "Help with fertility concerns, testing, and treatment options" },
+        { name: "Pregnancy & Maternity Care", description: "Support during pregnancy, antenatal care, and postnatal services" },
+        { name: "Menopause Support", description: "Advice and treatment for menopause symptoms and hormonal changes" },
     ];
 
     return (
-        <div>
-            <h3>What brings you here today?</h3>
+        <Paper
+            withBorder
+            radius="md"
+            p="lg"
+            style={{
+                margin: "0 24px",
+                backgroundColor: "#fff",
+            }}
+        >
+            <Text mb="sm" size="md" ta="left">
+                What brings you here today?
+            </Text>
 
-            <div className="category-grid">
+            <SimpleGrid cols={{ base: 1, sm: 2 }}>
                 {categories.map((cat) => (
-                    <div
-                    key={cat.name}
-                    className= "category-card"
-                    onClick={() => setCategory(cat.name)}
-                    
+                    <Paper
+                        key={cat.name}
+                        withBorder
+                        p="md"
+                        radius="md"
+                        onClick={() => setCategory(cat.name)}
+                        style={{
+                            cursor: 'pointer',
+                            borderColor: category === cat.name ? '#7c3aed' : '#e9ecef',
+                            backgroundColor: category === cat.name ? '#f5f3ff' : 'white',
+                            transition: 'all 0.2s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                            if (category !== cat.name) {
+                                e.currentTarget.style.backgroundColor = '#fafafa';
+                            }
+                        }}
+                        onMouseLeave={(e) => {
+                            if (category !== cat.name) {
+                                e.currentTarget.style.backgroundColor = 'white';
+                            }
+                        }}
                     >
-
-                    <h4>{cat.name}</h4>
-                    <p>{cat.description}</p> 
-                    </div>
+                        <Text fw={500} size="sm" ta="left">{cat.name}</Text>
+                        <Text size="xs" c="dimmed" mt={5} ta="left">
+                            {cat.description}
+                        </Text>
+                    </Paper>
                 ))}
-            </div>
-        </div>
+            </SimpleGrid>
+        </Paper>
     );
 }

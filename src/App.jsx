@@ -12,12 +12,12 @@ export default function App() {
   return (
     <Routes>
       <Route
-      path="/"
-      element={<HomePage setSearchData={setSearchData} />}
+        path="/"
+        element={<HomePage setSearchData={setSearchData} />}
       />
       <Route
-      path="/results"
-      element={<ResultsPage searchData={searchData} />}
+        path="/results"
+        element={<ResultsPage searchData={searchData} />}
       />
     </Routes>
   );

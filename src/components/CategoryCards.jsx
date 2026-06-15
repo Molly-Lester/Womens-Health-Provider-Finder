@@ -12,7 +12,7 @@ export default function CategoryCards({ category, setCategory }) {
 
     return (
         <div style={{ padding: "0 24px" }}>
-            <Text fw={600} mb="sm" size="lg">
+            <Text fw={600} mb="sm" size="xl">
                 What brings you here today?
             </Text>
 

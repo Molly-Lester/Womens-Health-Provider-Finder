@@ -14,13 +14,13 @@ export default function CategoryCards({ category, setCategory }) {
         <Paper
             withBorder
             radius="md"
-            p="xl"
+            p="lg"
             style={{
                 margin: "0 24px",
                 backgroundColor: "#fff",
             }}
         >
-            <Text fw={600} mb="xl" size="xl" ta="center">
+            <Text c="dimmed" mb="sm" size="md" ta="left">
                 What brings you here today?
             </Text>
 
@@ -49,8 +49,8 @@ export default function CategoryCards({ category, setCategory }) {
                             }
                         }}
                     >
-                        <Text fw={500}>{cat.name}</Text>
-                        <Text size="sm" c="dimmed">
+                        <Text fw={500} size="sm" ta="left">{cat.name}</Text>
+                        <Text size="xs" c="dimmed" mt={5} ta="left">
                             {cat.description}
                         </Text>
                     </Paper>

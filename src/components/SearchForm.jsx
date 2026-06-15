@@ -6,23 +6,23 @@ export default function SearchForm({ onSearch }) {
     const navigate = useNavigate();
     const [location, setLocation] = useState("");
     const [radius, setRadius] = useState("10");
-    const [category, setCategory] = useState(null);
+    const [category, setCategory] = useState("");
     const [error, setError] = useState("")
 
     const handleSearch = () => {
         setError("");
 
-        if(!location) {
+        if (!location) {
             setError("Please enter a location to continue.");
             return;
         }
 
-         if(!category) {
+        if (!category) {
             setError("Please select a category to continue.");
             return;
         }
 
-        onSearch ({
+        onSearch({
             location,
             radius,
             category,
@@ -32,59 +32,67 @@ export default function SearchForm({ onSearch }) {
     };
 
     return (
-        <div>
-            <h2>Find Women's Health Services Near You</h2>
+        <div className="search-page">
+            <header className="header">
+                <h1>Women's Health Clinic Finder</h1>
 
-            {/* Location */}
+                <p className="header-subtitle">
+                    Helping you find the right women’s health support by filtering local services based on what you need.
+                </p>
+            </header>
 
-            <input
-            type="text"
-            placeholder="Enter your location"
-            value={location}
-            onChange={(e) => {
-                setLocation(e.target.value);
-                setError("")
-            }}
+            <main className="form">
+                {/* Location */}
 
-            />
+                <input
+                    type="text"
+                    placeholder="Enter your location"
+                    value={location}
+                    onChange={(e) => {
+                        setLocation(e.target.value);
+                        setError("")
+                    }}
 
-            {/* Radius */}
-            <label htmlFor="radius">Search distance</label>
-            <select 
-            id="radius"
-            value={radius}
-            onChange={(e) => {
-                setRadius(e.target.value)
-                setError("")
-            }}
+                />
 
-            >
-                <option value="5">5 miles</option>
-                <option value="10">10 miles</option>
-                <option value="25">25 miles</option>
-                <option value="50">50 miles</option>
-                <option value="all">Anywhere in the UK</option>
-            </select>
+                {/* Radius */}
+                <label htmlFor="radius">Search distance</label>
+                <select
+                    id="radius"
+                    value={radius}
+                    onChange={(e) => {
+                        setRadius(e.target.value)
+                        setError("")
+                    }}
 
-            {/* Category Cards */}
+                >
+                    <option value="5">5 miles</option>
+                    <option value="10">10 miles</option>
+                    <option value="25">25 miles</option>
+                    <option value="50">50 miles</option>
+                    <option value="all">Anywhere in the UK</option>
+                </select>
 
-            <CategoryCards
-                category={category}
-                setCategory={setCategory}
-            />
+                {/* Category Cards */}
 
-            {/* Search Button */}
+                <CategoryCards
+                    category={category}
+                    setCategory={setCategory}
+                />
 
-            <button onClick={handleSearch}>
-                Find My Best Matches
-            </button>
+                {/* Search Button */}
 
-            {/* Error message */}
+                <button onClick={handleSearch}>
+                    Find My Best Matches
+                </button>
 
-            {error && (
-                <p className="error">
-                    {error}
-                </p>)}
+                {/* Error message */}
+
+                {error && (
+                    <p className="error">
+                        {error}
+                    </p>)}
+            </main>
         </div>
     );
 }

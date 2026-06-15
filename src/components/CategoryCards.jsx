@@ -20,7 +20,7 @@ export default function CategoryCards({ category, setCategory }) {
                 backgroundColor: "#fff",
             }}
         >
-            <Text c="dimmed" mb="sm" size="md" ta="left">
+            <Text mb="sm" size="md" ta="left">
                 What brings you here today?
             </Text>
 

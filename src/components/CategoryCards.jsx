@@ -1,4 +1,5 @@
 import { Text, Paper, SimpleGrid } from '@mantine/core';
+import classes from './CategoryCards.module.css';
 
 export default function CategoryCards({ category, setCategory }) {
     const categories = [
@@ -15,10 +16,7 @@ export default function CategoryCards({ category, setCategory }) {
             withBorder
             radius="md"
             p="lg"
-            style={{
-                margin: "0 24px",
-                backgroundColor: "#fff",
-            }}
+            className={classes.wrapper}
         >
             <Text mb="sm" size="md" ta="left">
                 What brings you here today?
@@ -32,22 +30,8 @@ export default function CategoryCards({ category, setCategory }) {
                         p="md"
                         radius="md"
                         onClick={() => setCategory(cat.name)}
-                        style={{
-                            cursor: 'pointer',
-                            borderColor: category === cat.name ? '#7c3aed' : '#e9ecef',
-                            backgroundColor: category === cat.name ? '#f5f3ff' : 'white',
-                            transition: 'all 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                            if (category !== cat.name) {
-                                e.currentTarget.style.backgroundColor = '#fafafa';
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (category !== cat.name) {
-                                e.currentTarget.style.backgroundColor = 'white';
-                            }
-                        }}
+                        className={`${classes.card} ${category === cat.name ? classes.selected : ''
+                            }`}
                     >
                         <Text fw={500} size="sm" ta="left">{cat.name}</Text>
                         <Text size="xs" c="dimmed" mt={5} ta="left">

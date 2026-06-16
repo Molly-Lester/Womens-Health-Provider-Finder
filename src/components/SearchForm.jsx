@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import CategoryCards from "./CategoryCards";
+import classes from './SearchForm.module.css';
 
 export default function SearchForm({ onSearch }) {
     const navigate = useNavigate();
@@ -41,37 +42,37 @@ export default function SearchForm({ onSearch }) {
                 </p>
             </header>
 
-            <main className="form">
+            <main className={classes.form}>
                 {/* Location */}
 
-                <input
-                    type="text"
-                    placeholder="Enter your location"
-                    value={location}
-                    onChange={(e) => {
-                        setLocation(e.target.value);
-                        setError("")
-                    }}
+                <div className={classes.searchBar}>
+                    <input
+                        type="text"
+                        placeholder="Enter your location"
+                        value={location}
+                        onChange={(e) => {
+                            setLocation(e.target.value);
+                            setError("");
+                        }}
+                        className={classes.input}
+                    />
 
-                />
-
-                {/* Radius */}
-                <label htmlFor="radius">Search distance</label>
-                <select
-                    id="radius"
-                    value={radius}
-                    onChange={(e) => {
-                        setRadius(e.target.value)
-                        setError("")
-                    }}
-
-                >
-                    <option value="5">5 miles</option>
-                    <option value="10">10 miles</option>
-                    <option value="25">25 miles</option>
-                    <option value="50">50 miles</option>
-                    <option value="all">Anywhere in the UK</option>
-                </select>
+                    <select
+                        id="radius"
+                        value={radius}
+                        onChange={(e) => {
+                            setRadius(e.target.value);
+                            setError("");
+                        }}
+                        className={classes.select}
+                    >
+                        <option value="5">5 miles</option>
+                        <option value="10">10 miles</option>
+                        <option value="25">25 miles</option>
+                        <option value="50">50 miles</option>
+                        <option value="all">Anywhere in the UK</option>
+                    </select>
+                </div>
 
                 {/* Category Cards */}
 
@@ -81,8 +82,10 @@ export default function SearchForm({ onSearch }) {
                 />
 
                 {/* Search Button */}
-
-                <button onClick={handleSearch}>
+                <button
+                    className={classes.button}
+                    onClick={handleSearch}
+                >
                     Find My Best Matches
                 </button>
 

@@ -3,7 +3,7 @@ import SearchForm from "../components/SearchForm";
 
 export default function HomePage({ setSearchData }) {
     return (
-        <Container size="md">
+        <Container size="lg">
             <SearchForm onSearch={setSearchData} />
         </Container>
     );

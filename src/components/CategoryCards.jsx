@@ -18,7 +18,7 @@ export default function CategoryCards({ category, setCategory }) {
             p="lg"
             className={classes.wrapper}
         >
-            <Text mb="sm" size="md" ta="left">
+            <Text mb="sm" size="sm" ta="left">
                 What brings you here today?
             </Text>
 

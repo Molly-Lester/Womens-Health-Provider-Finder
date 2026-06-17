@@ -37,6 +37,6 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 10px;
     width: 100%;
 }

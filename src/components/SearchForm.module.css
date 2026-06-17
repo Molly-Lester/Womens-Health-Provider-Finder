@@ -5,14 +5,21 @@
     width: 100%;
 }
 
+.searchContainer {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    flex-wrap: nowrap;
+}
+
 .searchBar {
     display: flex;
-    align-items: center;
+    flex: 1;
+    min-width: 0;
     border: 1px solid #e9ecef;
     border-radius: 10px;
     background: white;
     padding: 6px;
-    gap: 6px;
 }
 
 /* left side input */
@@ -25,22 +32,34 @@
 }
 
 /* right side dropdown */
+.radiusSelect {
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    background: white;
+}
+
 .select {
     border: none;
     outline: none;
     padding: 10px 12px;
     font-size: 14px;
-    background: white;
-    cursor: pointer;
-
-    /* divides the bar */
-    border-left: 2px solid #e9ecef;
 }
 
+.select {
+    &::placeholder {
+        color: #111827;
+        opacity: .6;
+    }
+}
 
-.input:focus,
-.select:focus {
-    outline: none;
+/* Hover */
+.option:hover {
+    border-color: #7c3aed;
+    background-color: #f5f3ff;
+    color: #5b21b6;
 }
 
 /* match search button */

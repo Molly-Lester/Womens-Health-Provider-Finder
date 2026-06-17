@@ -1,0 +1,76 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.searchContainer {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    flex-wrap: nowrap;
+}
+
+.searchBar {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    background: white;
+    padding: 6px;
+}
+
+/* left side input */
+.input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+/* right side dropdown */
+.radiusSelect {
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    background: white;
+}
+
+.select {
+    border: none;
+    outline: none;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+.select {
+    &::placeholder {
+        color: #111827;
+        opacity: .6;
+    }
+}
+
+/* Hover */
+.option:hover {
+    border-color: #7c3aed;
+    background-color: #f5f3ff;
+    color: #5b21b6;
+}
+
+/* match search button */
+.button {
+    background-color: #111;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}

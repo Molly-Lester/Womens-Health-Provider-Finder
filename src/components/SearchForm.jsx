@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Paper, Select, Text } from "@mantine/core";
 import CategoryCards from "./CategoryCards";
+import searchFormClasses from './SearchForm.module.css';
 
 export default function SearchForm({ onSearch }) {
     const navigate = useNavigate();
     const [location, setLocation] = useState("");
-    const [radius, setRadius] = useState("10");
+    const [radius, setRadius] = useState("");
     const [category, setCategory] = useState(null);
     const [providerType, setProviderType] = useState("all");
     const [error, setError] = useState("")
@@ -45,37 +47,55 @@ export default function SearchForm({ onSearch }) {
                 </p>
             </header>
 
-            <main className="form">
+            <main className={searchFormClasses.form}>
                 {/* Location */}
-
-                <input
-                    type="text"
-                    placeholder="Enter your location"
-                    value={location}
-                    onChange={(e) => {
-                        setLocation(e.target.value);
-                        setError("")
-                    }}
-
-                />
-
-                {/* Radius */}
-                <label htmlFor="radius">Search distance</label>
-                <select
-                    id="radius"
-                    value={radius}
-                    onChange={(e) => {
-                        setRadius(e.target.value)
-                        setError("")
-                    }}
-
+                <Paper
+                    withBorder
+                    radius="md"
+                    p="lg"
                 >
-                    <option value="5">5 miles</option>
-                    <option value="10">10 miles</option>
-                    <option value="25">25 miles</option>
-                    <option value="50">50 miles</option>
-                    <option value="all">Anywhere in the UK</option>
-                </select>
+                    <Text mb="sm" size="sm" ta="left">
+                        Location & Search Radius
+                    </Text>
+                    <div className={searchFormClasses.searchContainer}>
+                        <div className={searchFormClasses.searchBar}>
+                            <input
+                                type="text"
+                                placeholder="Enter your location"
+                                value={location}
+                                onChange={(e) => {
+                                    setLocation(e.target.value);
+                                    setError("");
+                                }}
+                                className={searchFormClasses.input}
+                            />
+                        </div>
+
+                        <div className={searchFormClasses.radiusSelect}>
+                            <Select
+                                id="radius"
+                                value={radius}
+                                onChange={(value) => {
+                                    setRadius(value);
+                                    setError('');
+                                }}
+                                placeholder="Select distance"
+                                data={[
+                                    { value: '5', label: '5 miles' },
+                                    { value: '10', label: '10 miles' },
+                                    { value: '25', label: '25 miles' },
+                                    { value: '50', label: '50 miles' },
+                                    { value: 'all', label: 'Anywhere in the UK' },
+                                ]}
+                                classNames={{
+                                    input: searchFormClasses.select,
+                                    option: searchFormClasses.option
+                                }}
+                                withCheckIcon={false}
+                            />
+                        </div>
+                    </div>
+                </Paper>
 
                 {/* Category Cards */}
 
@@ -98,18 +118,20 @@ export default function SearchForm({ onSearch }) {
                     <option value="all">All services</option>
                     <option value="nhs">NHS</option>
                     <option value="private">Private</option>
-                </select>                
+                </select>
 
                 {/* Search Button */}
-
-                <button onClick={handleSearch}>
+                <button
+                    className={searchFormClasses.button}
+                    onClick={handleSearch}
+                >
                     Find My Best Matches
                 </button>
 
                 {/* Error message */}
 
                 {error && (
-                    <p style={{color: "red", fontsize: "20px"}}>
+                    <p style={{ color: "red", fontsize: "20px" }}>
                         {error}
                     </p>)}
             </main>

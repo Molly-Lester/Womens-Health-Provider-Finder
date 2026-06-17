@@ -1,0 +1,42 @@
+.card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #e9ecef;
+}
+
+
+.card:hover {
+    background-color: #fafafa;
+}
+
+
+.selected {
+    border-color: #7c3aed;
+    background-color: #f5f3ff;
+}
+
+
+.card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #e9ecef;
+}
+
+
+.card:hover {
+    background-color: #fafafa;
+}
+
+
+.selected {
+    border-color: #7c3aed;
+    background-color: #f5f3ff;
+}
+
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}

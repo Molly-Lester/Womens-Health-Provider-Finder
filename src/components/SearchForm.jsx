@@ -8,7 +8,8 @@ export default function SearchForm({ onSearch }) {
     const navigate = useNavigate();
     const [location, setLocation] = useState("");
     const [radius, setRadius] = useState("");
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState(null);
+    const [providerType, setProviderType] = useState("all");
     const [error, setError] = useState("")
 
     const handleSearch = () => {
@@ -24,10 +25,13 @@ export default function SearchForm({ onSearch }) {
             return;
         }
 
+        setError("");
+
         onSearch({
             location,
             radius,
             category,
+            providerType
         });
 
         navigate("/results");
@@ -100,6 +104,22 @@ export default function SearchForm({ onSearch }) {
                     setCategory={setCategory}
                 />
 
+                {/* Provider */}
+                <label htmlFor="providerType">Provider type</label>
+                <select
+                    id="providerType"
+                    value={providerType}
+                    onChange={(e) => {
+                        setProviderType(e.target.value)
+                        setError("")
+                    }}
+
+                >
+                    <option value="all">All services</option>
+                    <option value="nhs">NHS</option>
+                    <option value="private">Private</option>
+                </select>
+
                 {/* Search Button */}
                 <button
                     className={searchFormClasses.button}
@@ -111,7 +131,7 @@ export default function SearchForm({ onSearch }) {
                 {/* Error message */}
 
                 {error && (
-                    <p className="error">
+                    <p style={{ color: "red", fontsize: "20px" }}>
                         {error}
                     </p>)}
             </main>

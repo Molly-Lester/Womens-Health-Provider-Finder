@@ -5,6 +5,7 @@
     width: 100%;
 }
 
+/* location search bar styling */
 .searchContainer {
     display: flex;
     align-items: stretch;
@@ -48,13 +49,6 @@
     font-size: 14px;
 }
 
-.select {
-    &::placeholder {
-        color: #111827;
-        opacity: .6;
-    }
-}
-
 /* Hover */
 .option:hover {
     border-color: #7c3aed;
@@ -73,4 +67,28 @@
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s ease;
+}
+
+/* provider bar styling */
+.card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #e9ecef;
+}
+
+.card:hover {
+    background-color: #f8fbff;
+}
+
+.selected {
+    border: 1px solid #228be6;
+    background-color: #f1f9ff;
+}
+
+.sectionCard {
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 16px;
+    background: white;
+    transition: all 0.2s ease;
 }

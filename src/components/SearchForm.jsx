@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Paper, Select, Text } from "@mantine/core";
+import { Paper, Select, Text, SimpleGrid } from "@mantine/core";
 import CategoryCards from "./CategoryCards";
 import searchFormClasses from './SearchForm.module.css';
 
@@ -105,21 +105,36 @@ export default function SearchForm({ onSearch }) {
                 />
 
                 {/* Provider */}
-                <label htmlFor="providerType">Provider type</label>
-                <select
-                    id="providerType"
-                    value={providerType}
-                    onChange={(e) => {
-                        setProviderType(e.target.value)
-                        setError("")
-                    }}
+                <Paper className={searchFormClasses.sectionCard}>
+                    <Text mb="sm" size="sm" ta="left">
+                        Provider type
+                    </Text>
 
-                >
-                    <option value="all">All services</option>
-                    <option value="nhs">NHS</option>
-                    <option value="private">Private</option>
-                </select>
-
+                    <SimpleGrid cols={{ base: 1, sm: 3 }}>
+                        {[
+                            { value: "all", label: "All services" },
+                            { value: "nhs", label: "NHS" },
+                            { value: "private", label: "Private" },
+                        ].map((option) => (
+                            <Paper
+                                key={option.value}
+                                withBorder
+                                p="md"
+                                radius="md"
+                                onClick={() => {
+                                    setProviderType(option.value);
+                                    setError("");
+                                }}
+                                className={`${searchFormClasses.card} ${providerType === option.value ? searchFormClasses.selected : ""
+                                    }`}
+                            >
+                                <Text fw={500} size="sm">
+                                    {option.label}
+                                </Text>
+                            </Paper>
+                        ))}
+                    </SimpleGrid>
+                </Paper>
                 {/* Search Button */}
                 <button
                     className={searchFormClasses.button}

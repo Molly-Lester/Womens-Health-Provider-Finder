@@ -54,7 +54,7 @@ INSERT INTO health_concerns VALUES
 (105,'Menopause support');
 
 
-CREATE TABLE clinicconcerns (
+CREATE TABLE clinic_concerns (
   clinic_id INT NOT NULL,
   concern_id INT NOT NULL,
   PRIMARY KEY (clinic_id, concern_id),
@@ -63,7 +63,7 @@ CREATE TABLE clinicconcerns (
   FOREIGN KEY (concern_id)
     REFERENCES health_concerns (concern_id)
 );
-INSERT INTO clinicconcerns VALUES
+INSERT INTO clinic_concerns VALUES
 (3,100),
 (9,100),
 (11,100),

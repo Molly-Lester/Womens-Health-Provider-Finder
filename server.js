@@ -31,7 +31,26 @@ app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
 });
 
+function getDistanceMiles(lat1, lon1, lat2, lon2) {
+    const R = 3958.8;
 
+    const toRad = (v) => (v * Math.PI) / 180;
+
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+
+    const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) ** 2;
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c;
+}
+
+// Query that gets all clinics 
 app.get('/clinics', (req, res) => {
     db.query('SELECT * FROM clinics', (err, results) => {
         if (err) {
@@ -41,6 +60,7 @@ app.get('/clinics', (req, res) => {
     });
 });
 
+// API using postcodes.io takes user postcode and return latitude and longitude 
 app.get('/geocode', async (req, res) => {
     const postcode = req.query.postcode;
 
@@ -68,6 +88,64 @@ app.get('/geocode', async (req, res) => {
 
     } catch (err) {
         res.status(500).json({ error: "Geocoding failed", details: err.message });
+    }
+});
+
+// Query that gets clinics filtering by condition selected and radius 
+app.get('/clinics/nearby', async (req, res) => {
+    const { postcode, radius, concern_id } = req.query;
+
+    if (!postcode || !radius || !concern_id) {
+        return res.status(400).json({ error: "postcode, radius and concern_id are required" });
+    }
+
+    try {
+        // Convert postcode to coordinates
+        const geoResponse = await fetch(
+            `https://api.postcodes.io/postcodes/${encodeURIComponent(postcode)}`
+        );
+
+        const geoData = await geoResponse.json();
+
+        if (geoData.status !== 200) {
+            return res.status(404).json({ error: "Invalid postcode" });
+        }
+
+        const userLat = geoData.result.latitude;
+        const userLng = geoData.result.longitude;
+
+        // Get clinics matching category
+        db.query(
+            `SELECT c.*
+             FROM clinics c
+             JOIN clinic_concerns cc ON c.clinic_id = cc.clinic_id
+             WHERE cc.concern_id = ?`,
+            [concern_id],
+            (err, clinics) => {
+
+                if (err) {
+                    return res.status(500).json(err);
+                }
+
+                // Filter by distance
+                const nearby = clinics.filter(clinic => {
+                    const distance = getDistanceMiles(
+                        userLat,
+                        userLng,
+                        clinic.latitude,
+                        clinic.longitude
+                    );
+
+                    return distance <= radius;
+                });
+
+                // Send results back
+                res.json(nearby);
+            }
+        );
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 });
 

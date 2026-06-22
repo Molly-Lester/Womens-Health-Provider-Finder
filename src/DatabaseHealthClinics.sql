@@ -1,6 +1,4 @@
-DROP TABLE IF EXISTS clinicconcerns;
-DROP TABLE IF EXISTS health_concerns;
-DROP TABLE IF EXISTS clinics;
+DROP DATABASE IF EXISTS clinics_database;
 CREATE DATABASE clinics_database;
 USE clinics_database;
 
@@ -111,5 +109,3 @@ INSERT INTO clinicconcerns VALUES
 (19,105),
 (20,105);
 
-
-SELECT * FROM clinicconcerns;

@@ -30,7 +30,7 @@ db.connect((err) => {
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
 });
-
+// Harvesine formula to calculate distance between user and clinics using coordinates
 function getDistanceMiles(lat1, lon1, lat2, lon2) {
     const R = 3958.8;
 
@@ -50,7 +50,7 @@ function getDistanceMiles(lat1, lon1, lat2, lon2) {
     return R * c;
 }
 
-// Query that gets all clinics 
+// Query that gets all clinics (for testing purposes)
 app.get('/clinics', (req, res) => {
     db.query('SELECT * FROM clinics', (err, results) => {
         if (err) {

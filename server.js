@@ -41,5 +41,35 @@ app.get('/clinics', (req, res) => {
     });
 });
 
+app.get('/geocode', async (req, res) => {
+    const postcode = req.query.postcode;
+
+    if (!postcode) {
+        return res.status(400).json({ error: "Postcode is required" });
+    }
+
+    try {
+        const response = await fetch(
+            `https://api.postcodes.io/postcodes/${encodeURIComponent(postcode)}`
+        );
+
+        const data = await response.json();
+
+        if (data.status !== 200) {
+            return res.status(404).json({ error: "Postcode not found" });
+        }
+
+        const result = data.result;
+
+        res.json({
+            latitude: result.latitude,
+            longitude: result.longitude
+        });
+
+    } catch (err) {
+        res.status(500).json({ error: "Geocoding failed", details: err.message });
+    }
+});
+
 
 

@@ -6,14 +6,17 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+import dotenv from "dotenv";
+dotenv.config();
 
+const dbConfig = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
+};
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'Loneranger',
-    database: 'clinics_database'
-});
 
 db.connect((err) => {
     if (err) {
@@ -28,11 +31,6 @@ app.listen(3000, () => {
 });
 
 
-
-app.get('/', (req, res) => {
-    res.send('API is working');
-});
-
 app.get('/clinics', (req, res) => {
     db.query('SELECT * FROM clinics', (err, results) => {
         if (err) {
@@ -42,23 +40,5 @@ app.get('/clinics', (req, res) => {
     });
 });
 
-app.get('/clinics/concern/:name', (req, res) => {
-    const concernName = req.params.name;
-
-    const sql = `
-        SELECT c.*
-        FROM clinics c
-        JOIN clinicconcerns cc ON c.clinic_id = cc.clinic_id
-        JOIN health_concerns hc ON cc.concern_id = hc.concern_id
-        WHERE hc.concern_name = ?
-    `;
-
-    db.query(sql, [concernName], (err, results) => {
-        if (err) {
-            return res.status(500).json(err);
-        }
-        res.json(results);
-    });
-});
 
 

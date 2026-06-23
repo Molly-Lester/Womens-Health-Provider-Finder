@@ -30,6 +30,7 @@ db.connect((err) => {
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
 });
+
 // Harvesine formula to calculate distance between user and clinics using coordinates
 function getDistanceMiles(lat1, lon1, lat2, lon2) {
     const R = 3958.8;
@@ -60,7 +61,7 @@ app.get('/clinics', (req, res) => {
     });
 });
 
-// API using postcodes.io takes user postcode and return latitude and longitude 
+// API using postcodes.io takes user postcode and returns the latitude and longitude 
 app.get('/geocode', async (req, res) => {
     const postcode = req.query.postcode;
 
@@ -91,16 +92,19 @@ app.get('/geocode', async (req, res) => {
     }
 });
 
-// Query that gets clinics filtering by condition selected and radius 
-app.get('/clinics/nearby', async (req, res) => {
-    const { postcode, radius, concern_id } = req.query;
 
-    if (!postcode || !radius || !concern_id) {
-        return res.status(400).json({ error: "postcode, radius and concern_id are required" });
+// Query that gets clinics filtering by user postcode, radius, condition (concern_id) and provider type (clinic_type)
+app.get('/clinics/nearby', async (req, res) => {
+    const { postcode, radius, concern_id, clinic_type } = req.query;
+
+    if (!postcode || !radius || !concern_id || !clinic_type) {
+        return res.status(400).json({
+            error: "postcode, radius, concern_id and clinic_type are required"
+        });
     }
 
     try {
-        // Convert postcode to coordinates
+        // 1. Convert postcode to coordinates
         const geoResponse = await fetch(
             `https://api.postcodes.io/postcodes/${encodeURIComponent(postcode)}`
         );
@@ -114,35 +118,56 @@ app.get('/clinics/nearby', async (req, res) => {
         const userLat = geoData.result.latitude;
         const userLng = geoData.result.longitude;
 
-        // Get clinics matching category
-        db.query(
-            `SELECT c.*
-             FROM clinics c
-             JOIN clinic_concerns cc ON c.clinic_id = cc.clinic_id
-             WHERE cc.concern_id = ?`,
-            [concern_id],
-            (err, clinics) => {
+        // 2. Build SQL query (category + provider type filtering)
+        // distinct ensures that a clinic only appears once when using joins
+        let sql = `
+            SELECT DISTINCT c.*
+            FROM clinics c
+            JOIN clinic_concerns cc ON c.clinic_id = cc.clinic_id
+            WHERE cc.concern_id = ?
+        `;
 
-                if (err) {
-                    return res.status(500).json(err);
-                }
+        const params = [concern_id];
 
-                // Filter by distance
-                const nearby = clinics.filter(clinic => {
-                    const distance = getDistanceMiles(
-                        userLat,
-                        userLng,
-                        clinic.latitude,
-                        clinic.longitude
-                    );
+        // Only filter by NHS/Private if the user selected one (skip if "all")
+        if (clinic_type && clinic_type !== "all") {
+            sql += " AND c.clinic_type = ?";
+            params.push(clinic_type);
+        }
 
-                    return distance <= radius;
-                });
-
-                // Send results back
-                res.json(nearby);
+        // 3. Get matching clinics from DB
+        db.query(sql, params, (err, clinics) => {
+            if (err) {
+                return res.status(500).json(err);
             }
-        );
+
+            // 4. Handle radius 
+
+            // If the user selects "Anywhere in the UK", don't apply a distance limit.
+            // Otherwise convert the selected radius(e.g. "5", "10", "25") into a number.
+            let radiusMiles;
+
+            if (radius === "all") {
+                radiusMiles = Infinity;
+            } else {
+                radiusMiles = Number(radius);
+            }
+
+            // 5. Distance filter
+            const nearby = clinics.filter(clinic => {
+                const distance = getDistanceMiles(
+                    userLat,
+                    userLng,
+                    clinic.latitude,
+                    clinic.longitude
+                );
+
+                return distance <= radiusMiles;
+            });
+
+            // 6. Return results
+            res.json(nearby);
+        });
 
     } catch (err) {
         res.status(500).json({ error: err.message });

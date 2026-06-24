@@ -6,17 +6,18 @@ import searchFormClasses from './SearchForm.module.css';
 
 export default function SearchForm({ onSearch }) {
     const navigate = useNavigate();
-    const [location, setLocation] = useState("");
-    const [radius, setRadius] = useState("");
+    const [postcode, setPostcode] = useState("");
+    const [radius, setRadius] = useState("5");
     const [category, setCategory] = useState(null);
     const [providerType, setProviderType] = useState("all");
     const [error, setError] = useState("")
 
-    const handleSearch = () => {
+    const handleSearch = async () => {
+        console.log("Search button clicked")
         setError("");
 
-        if (!location) {
-            setError("Please enter a location to continue.");
+        if (!postcode) {
+            setError("Please enter a postcode to continue.");
             return;
         }
 
@@ -25,16 +26,31 @@ export default function SearchForm({ onSearch }) {
             return;
         }
 
-        setError("");
+        try {
+            const params = new URLSearchParams ({
+                postcode,
+                radius,
+                concern_id: category,
+                clinic_type: providerType,
+            });
 
-        onSearch({
-            location,
-            radius,
-            category,
-            providerType
-        });
+            const response = await fetch(
+                `http://localhost:3000/clinics/nearby?${params.toString()}`
+            );
+            const data = await response.json();
 
-        navigate("/results");
+            if (!response.ok) {
+                setError(data.error || "Something went wrong");
+                return;
+            }
+
+            onSearch(data);
+
+            navigate("/results");
+
+        } catch (err) {
+            setError("Failed to fetch clinics");
+        }
     };
 
     return (
@@ -48,23 +64,23 @@ export default function SearchForm({ onSearch }) {
             </header>
 
             <main className={searchFormClasses.form}>
-                {/* Location */}
+                {/* Postcode */}
                 <Paper
                     withBorder
                     radius="md"
                     p="lg"
                 >
                     <Text mb="sm" size="sm" ta="left">
-                        Location & Search Radius
+                        Where should we search?
                     </Text>
                     <div className={searchFormClasses.searchContainer}>
                         <div className={searchFormClasses.searchBar}>
                             <input
                                 type="text"
-                                placeholder="Enter your location"
-                                value={location}
+                                placeholder="Enter your postcode"
+                                value={postcode}
                                 onChange={(e) => {
-                                    setLocation(e.target.value);
+                                    setPostcode(e.target.value);
                                     setError("");
                                 }}
                                 className={searchFormClasses.input}
@@ -146,7 +162,7 @@ export default function SearchForm({ onSearch }) {
                 {/* Error message */}
 
                 {error && (
-                    <p style={{ color: "red", fontsize: "20px" }}>
+                    <p style={{ color: "red", fontSize: "20px" }}>
                         {error}
                     </p>)}
             </main>

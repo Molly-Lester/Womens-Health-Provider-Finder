@@ -5,7 +5,6 @@ import "./App.css"
 import HomePage from "./pages/HomePage"
 import ResultsPage from "./pages/ResultsPage"
 
-
 export default function App() {
   const [searchData, setSearchData] = useState(null);
 

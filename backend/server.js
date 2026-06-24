@@ -18,7 +18,6 @@ const db = mysql.createConnection({
     port: process.env.DB_PORT
 });
 
-
 db.connect((err) => {
     if (err) {
         console.log('DB connection failed:', err);
@@ -49,6 +48,24 @@ function getDistanceMiles(lat1, lon1, lat2, lon2) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return R * c;
+}
+
+
+async function getCoordinates(postcode) {
+    const response = await fetch (
+        `https://api.postcodes.io/postcodes/${encodeURIComponent(postcode)}`
+    );
+
+    const data = await response.json();
+
+    if (data.status !== 200) {
+        throw new Error("Invalid postcode");
+    }
+
+    return {
+        latitude: data.result.latitude,
+        longitude: data.result.longitude
+    };
 }
 
 // Query that gets all clinics (for testing purposes)
@@ -155,6 +172,8 @@ app.get('/clinics/nearby', async (req, res) => {
 
             // 5. Distance filter
             const nearby = clinics.filter(clinic => {
+                if(!clinic.latitude || !clinic.longitude) return false;
+
                 const distance = getDistanceMiles(
                     userLat,
                     userLng,

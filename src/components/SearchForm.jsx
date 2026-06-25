@@ -27,8 +27,15 @@ export default function SearchForm({ onSearch }) {
         }
 
         try {
+            const params = new URLSearchParams({
+                postcode,
+                radius,
+                concern_id: category,
+                clinic_type: providerType,
+            });
+
             const response = await fetch(
-                `http://localhost:3000/clinics/nearby?postcode=${postcode}&radius=${radius}&concern_id=${category}&clinic_type=${providerType}`
+                `http://localhost:3000/clinics/nearby?${params.toString()}`
             );
             const data = await response.json();
 

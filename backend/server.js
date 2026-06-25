@@ -52,7 +52,7 @@ function getDistanceMiles(lat1, lon1, lat2, lon2) {
 
 
 async function getCoordinates(postcode) {
-    const response = await fetch (
+    const response = await fetch(
         `https://api.postcodes.io/postcodes/${encodeURIComponent(postcode)}`
     );
 
@@ -172,7 +172,7 @@ app.get('/clinics/nearby', async (req, res) => {
 
             // 5. Distance filter
             const nearby = clinics.filter(clinic => {
-                if(!clinic.latitude || !clinic.longitude) return false;
+                if (!clinic.latitude || !clinic.longitude) return false;
 
                 const distance = getDistanceMiles(
                     userLat,

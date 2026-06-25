@@ -27,7 +27,7 @@ export default function SearchForm({ onSearch }) {
         }
 
         try {
-            const params = new URLSearchParams ({
+            const params = new URLSearchParams({
                 postcode,
                 radius,
                 concern_id: category,

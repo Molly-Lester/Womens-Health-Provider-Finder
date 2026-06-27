@@ -1,30 +1,47 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Paper, Select, Text, SimpleGrid } from "@mantine/core";
+import { showNotification } from '@mantine/notifications';
 import CategoryCards from "./CategoryCards";
 import searchFormClasses from './SearchForm.module.css';
 
-export default function SearchForm({ onSearch }) {
+export default function SearchForm({ onSearch, setLoading }) {
     const navigate = useNavigate();
     const [postcode, setPostcode] = useState("");
     const [radius, setRadius] = useState("5");
     const [category, setCategory] = useState(null);
     const [providerType, setProviderType] = useState("all");
-    const [error, setError] = useState("")
+    const [errors, setErrors] = useState({
+        postcode: "",
+        category: ""
+    });
 
     const handleSearch = async () => {
-        console.log("Search button clicked")
-        setError("");
+        const newErrors = {
+            postcode: "",
+            category: ""
+        };
+
+        let hasError = false;
 
         if (!postcode) {
-            setError("Please enter a postcode to continue.");
-            return;
+            newErrors.postcode = "Please enter a postcode to continue.";
+            hasError = true;
         }
 
         if (!category) {
-            setError("Please select a category to continue.");
-            return;
+            newErrors.category = "Please select a category.";
+            hasError = true;
         }
+
+        setErrors(newErrors);
+
+        if (hasError) return;
+
+        setLoading(true);
+
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        await sleep(1000);
 
         try {
             const params = new URLSearchParams({
@@ -37,19 +54,39 @@ export default function SearchForm({ onSearch }) {
             const response = await fetch(
                 `http://localhost:3000/clinics/nearby?${params.toString()}`
             );
+
             const data = await response.json();
 
             if (!response.ok) {
-                setError(data.error || "Something went wrong");
+                setErrors(prev => ({
+                    ...prev,
+                    form: data.error || "Something went wrong"
+                }));
+
+                showNotification({
+                    title: "Network error",
+                    message: data.error || "Something went wrong",
+                    color: "red",
+                });
+
                 return;
             }
 
             onSearch(data);
-
             navigate("/results");
 
         } catch (err) {
-            setError("Failed to fetch clinics");
+            setErrors(prev => ({
+                ...prev,
+                form: "Failed to fetch clinics"
+            }));
+            showNotification({
+                title: "Network error",
+                message: "We’re having trouble connecting to the server. Please check your connection and try again.",
+                color: "red",
+            });
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -74,14 +111,16 @@ export default function SearchForm({ onSearch }) {
                         Where should we search?
                     </Text>
                     <div className={searchFormClasses.searchContainer}>
-                        <div className={searchFormClasses.searchBar}>
+                        <div
+                            className={`${searchFormClasses.searchBar} 
+                            ${errors.postcode ? searchFormClasses.searchBarError : ""}`}
+                        >
                             <input
-                                type="text"
                                 placeholder="Enter your postcode"
                                 value={postcode}
                                 onChange={(e) => {
                                     setPostcode(e.target.value);
-                                    setError("");
+                                    setErrors(prev => ({ ...prev, postcode: "" }));
                                 }}
                                 className={searchFormClasses.input}
                             />
@@ -93,7 +132,7 @@ export default function SearchForm({ onSearch }) {
                                 value={radius}
                                 onChange={(value) => {
                                     setRadius(value);
-                                    setError('');
+                                    setErrors(prev => ({ ...prev, radius: "" }));
                                 }}
                                 placeholder="Select distance"
                                 data={[
@@ -111,6 +150,11 @@ export default function SearchForm({ onSearch }) {
                             />
                         </div>
                     </div>
+                    {errors.postcode && (
+                        <p className={searchFormClasses.errorText}>
+                            {errors.postcode}
+                        </p>
+                    )}
                 </Paper>
 
                 {/* Category Cards */}
@@ -118,6 +162,7 @@ export default function SearchForm({ onSearch }) {
                 <CategoryCards
                     category={category}
                     setCategory={setCategory}
+                    error={errors.category}
                 />
 
                 {/* Provider */}
@@ -139,7 +184,7 @@ export default function SearchForm({ onSearch }) {
                                 radius="md"
                                 onClick={() => {
                                     setProviderType(option.value);
-                                    setError("");
+                                    setErrors(prev => ({ ...prev, provider: "" }));
                                 }}
                                 className={`${searchFormClasses.card} ${providerType === option.value ? searchFormClasses.selected : ""
                                     }`}
@@ -158,13 +203,6 @@ export default function SearchForm({ onSearch }) {
                 >
                     Find My Best Matches
                 </button>
-
-                {/* Error message */}
-
-                {error && (
-                    <p style={{ color: "red", fontSize: "20px" }}>
-                        {error}
-                    </p>)}
             </main>
         </div>
     );

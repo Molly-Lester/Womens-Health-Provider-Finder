@@ -54,7 +54,7 @@ export default function SearchForm({ onSearch }) {
 
             if (!response.ok) {
                 showNotification({
-                    title: "Search failed",
+                    title: "Network error",
                     message: data.error || "Something went wrong",
                     color: "red",
                 });
@@ -71,8 +71,8 @@ export default function SearchForm({ onSearch }) {
 
         } catch (err) {
             showNotification({
-                title: "Search failed",
-                message: "Failed to fetch clinics, try and increase postcode radius",
+                title: "Network error",
+                message: "We’re having trouble connecting to the server. Please check your connection and try again.",
                 color: "red",
             });
 

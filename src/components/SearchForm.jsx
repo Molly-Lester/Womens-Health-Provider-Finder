@@ -4,7 +4,7 @@ import { Paper, Select, Text, SimpleGrid } from "@mantine/core";
 import CategoryCards from "./CategoryCards";
 import searchFormClasses from './SearchForm.module.css';
 
-export default function SearchForm({ onSearch }) {
+export default function SearchForm({ onSearch, setLoading }) {
     const navigate = useNavigate();
     const [postcode, setPostcode] = useState("");
     const [radius, setRadius] = useState("5");
@@ -26,6 +26,11 @@ export default function SearchForm({ onSearch }) {
             return;
         }
 
+        setLoading(true);
+
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        await sleep(1000);
+
         try {
             const params = new URLSearchParams({
                 postcode,
@@ -41,6 +46,7 @@ export default function SearchForm({ onSearch }) {
 
             if (!response.ok) {
                 setError(data.error || "Something went wrong");
+                setLoading(true);
                 return;
             }
 
@@ -50,6 +56,8 @@ export default function SearchForm({ onSearch }) {
 
         } catch (err) {
             setError("Failed to fetch clinics");
+        } finally {
+            setLoading(false);
         }
     };
 

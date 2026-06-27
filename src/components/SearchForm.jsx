@@ -5,7 +5,7 @@ import { showNotification } from '@mantine/notifications';
 import CategoryCards from "./CategoryCards";
 import searchFormClasses from './SearchForm.module.css';
 
-export default function SearchForm({ onSearch }) {
+export default function SearchForm({ onSearch, setLoading }) {
     const navigate = useNavigate();
     const [postcode, setPostcode] = useState("");
     const [radius, setRadius] = useState("5");
@@ -38,6 +38,11 @@ export default function SearchForm({ onSearch }) {
 
         if (hasError) return;
 
+        setLoading(true);
+
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        await sleep(1000);
+
         try {
             const params = new URLSearchParams({
                 postcode,
@@ -53,16 +58,17 @@ export default function SearchForm({ onSearch }) {
             const data = await response.json();
 
             if (!response.ok) {
+                setErrors(prev => ({
+                    ...prev,
+                    form: data.error || "Something went wrong"
+                }));
+
                 showNotification({
                     title: "Network error",
                     message: data.error || "Something went wrong",
                     color: "red",
                 });
 
-                setErrors(prev => ({
-                    ...prev,
-                    form: data.error || "Something went wrong"
-                }));
                 return;
             }
 
@@ -70,16 +76,17 @@ export default function SearchForm({ onSearch }) {
             navigate("/results");
 
         } catch (err) {
+            setErrors(prev => ({
+                ...prev,
+                form: "Failed to fetch clinics"
+            }));
             showNotification({
                 title: "Network error",
                 message: "We’re having trouble connecting to the server. Please check your connection and try again.",
                 color: "red",
             });
-
-            setErrors(prev => ({
-                ...prev,
-                form: "Failed to fetch clinics"
-            }));
+        } finally {
+            setLoading(false);
         }
     };
 

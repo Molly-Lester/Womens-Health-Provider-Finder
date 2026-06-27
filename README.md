@@ -119,14 +119,14 @@ You can now:
 ### Destiny Iyamu Omoragbon
 - Worked on building and improving the main search experience for the application. This included developing the category selection system, search form, and form validation to ensure users provide all required inputs before searching. Expanded the functionality by adding a provider filter (NHS, private, or all services) and ensured all search parameters were correctly passed through the application.
 
-- Also helped connect the frontend to the backend API, handling the flow of search data (postcode, radius, category, and provider type) and integrating postcode geocoding using the Postcodes.io API. Built and improved the results page to display clinic data clearly, including handling empty states, no search scenarios, and showing key clinic information such as name, address, and provider type. Set up core routing between pages so the user can move smoothly between the home and results views.
+- Also helped connect the frontend to the backend API, handling the flow of search data (postcode, radius, category, and provider type) and integrating postcode geocoding using the Postcodes.io API. Built and improved the results page to display clinic data clearly, including handling empty states, no search scenarios, and showing key clinic information such as name, address, and provider type. Set up routing using react router so the user can move smoothly between the home and results pages.
 
 ### Molly Lester
-- Contributed to the initial project setup using Vite, including structuring the application and setting up base pages. Worked on improving the overall UI, particularly the category selection section, by using Mantine components and custom CSS. Redesigned category cards to make them more interactive and user-friendly, adding hover and selected states, and refining category labels for clarity and consistency.
-
-- Focused on styling and improving the search interface, including the search form, inputs, dropdowns, and category selection UI. Used Mantine components alongside custom styling to improve layout, spacing, and visual cohesiveness across the application. Enhanced the provider type section by converting it into interactive selectable cards with clearer user feedback.
+- Contributed to the initial project setup using Vite, helping to structure the application and set up the base pages. Focused on designing and improving the user interface using Mantine components and custom CSS, including the search form, inputs, dropdowns, category selection, and provider type section. Redesigned the category cards with hover and selected states, refined category labels for better clarity, and converted the provider type options into interactive selectable cards to create a more user-friendly search experience.
 
 - Developed the backend using Node.js and Express, creating API routes for retrieving and filtering clinic data. Connected the application to a MySQL database and implemented logic for handling user search inputs. Integrated postcode-to-coordinates conversion using an external API and used the Haversine formula to calculate distances, enabling location-based filtering of nearby clinics based on category and provider type.
+
+- Improved the overall user experience by refining how errors are displayed throughout the search form. Repositioned error messages to make them more noticeable, and introduced Mantine toast notifications to clearly communicate API and network errors. Also implemented a loading state with a spinner to give users visual feedback while clinic search results are being fetched.
 
 - Created and structured the project README file, including the project overview, features, setup instructions, and documentation to help users run the application.
 
@@ -134,7 +134,7 @@ You can now:
 - Responsible for creating the project presentation slides and contributed to the styling of the results page. This included improving the layout and visual presentation of the results section to ensure the clinic information was clear, readable, and user-friendly. 
 
 ### Danielle Brereton-Smith
-- Designed and built the MySQL database for the project, including setting up the schema, tables, and relationships. Also researched and collected real data from 20 women’s healthcare clinics and manually entered it into the database to ensure the application had accurate, realistic data to work with.
+- Designed and built the MySQL database for the project, including setting up the database, tables, and relationships. Also researched and collected real data from 20 women’s healthcare clinics and manually entered it into the database to ensure the application had accurate, realistic data to work with.
 
 - Helped complete the final connection between the frontend and backend so that user searches return real clinic results. Linked the search form to the API using query parameters (postcode, radius, category, and provider type) and ensured the data flows correctly through the app. Updated the category system to use consistent IDs for filtering. Built out the results page to handle different states including no search, no results, and successful results. Displayed clinic information clearly, including name, address, contact details, and website links, so users can easily view and access nearby services.
 

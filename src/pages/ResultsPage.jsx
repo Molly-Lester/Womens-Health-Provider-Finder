@@ -16,35 +16,41 @@ export default function ResultsPage({ searchData }) {
 
     return (
         <div>
-            <h2>Search results</h2>
-            <h3>Clinics</h3>
+            <h2>Search results for clinics</h2>
+
 
             {searchData.length === 0 && (
-                <p>No clincs found matching your search.</p>
-            )}
+                <div>
+                    <p>We couldn’t find any clinics matching your search.</p>
+                    <p>Try adjusting your filters or searching for something else.</p>
+                </div>
+            )
+            }
 
-            {searchData.length > 0 && (
-                <ul>
-                    {searchData.map((clinic) => (
-                        <li key={clinic.clinic_id}>
-                            <strong>{clinic.clinic_name}</strong> ({clinic.clinic_type})
-                            <br />
-                            {clinic.address}, {clinic.postcode}
-                            <br />
-                            {clinic.phone_number && <span>{clinic.phone_number}<br /></span>}
-                            {clinic.website && (
-                                <a href={clinic.website} target="_blank" rel="noreferrer">
-                                    Visit website
-                                </a>
-                            )}
-                        </li>
-                    ))}
-                </ul>
-            )}
+            {
+                searchData.length > 0 && (
+                    <ul>
+                        {searchData.map((clinic) => (
+                            <li key={clinic.clinic_id}>
+                                <strong>{clinic.clinic_name}</strong> ({clinic.clinic_type})
+                                <br />
+                                {clinic.address}, {clinic.postcode}
+                                <br />
+                                {clinic.phone_number && <span>{clinic.phone_number}<br /></span>}
+                                {clinic.website && (
+                                    <a href={clinic.website} target="_blank" rel="noreferrer">
+                                        Visit website
+                                    </a>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                )
+            }
 
             <button onClick={() => navigate("/")}>
                 New Search
             </button>
-        </div>
+        </div >
     );
 }

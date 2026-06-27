@@ -23,6 +23,10 @@
     padding: 6px;
 }
 
+.searchBarError {
+    border: 1px solid #fa5252;
+}
+
 /* left side input */
 .input {
     flex: 1;
@@ -30,6 +34,14 @@
     outline: none;
     padding: 10px 12px;
     font-size: 14px;
+}
+
+/* postcode error */
+.errorText {
+    color: #fa5252;
+    text-align: left;
+    padding-left: 10px;
+    font-size: 12px;
 }
 
 /* right side dropdown */

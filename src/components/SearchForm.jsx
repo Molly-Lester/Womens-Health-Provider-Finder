@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Paper, Select, Text, SimpleGrid } from "@mantine/core";
+import { showNotification } from '@mantine/notifications';
 import CategoryCards from "./CategoryCards";
 import searchFormClasses from './SearchForm.module.css';
 
@@ -52,6 +53,12 @@ export default function SearchForm({ onSearch }) {
             const data = await response.json();
 
             if (!response.ok) {
+                showNotification({
+                    title: "Search failed",
+                    message: data.error || "Something went wrong",
+                    color: "red",
+                });
+
                 setErrors(prev => ({
                     ...prev,
                     form: data.error || "Something went wrong"
@@ -63,6 +70,12 @@ export default function SearchForm({ onSearch }) {
             navigate("/results");
 
         } catch (err) {
+            showNotification({
+                title: "Search failed",
+                message: "Failed to fetch clinics, try and increase postcode radius",
+                color: "red",
+            });
+
             setErrors(prev => ({
                 ...prev,
                 form: "Failed to fetch clinics"
@@ -112,7 +125,7 @@ export default function SearchForm({ onSearch }) {
                                 value={radius}
                                 onChange={(value) => {
                                     setRadius(value);
-                                    setError('');
+                                    setErrors(prev => ({ ...prev, radius: "" }));
                                 }}
                                 placeholder="Select distance"
                                 data={[
@@ -183,14 +196,6 @@ export default function SearchForm({ onSearch }) {
                 >
                     Find My Best Matches
                 </button>
-
-                {/* Error message */}
-
-                {errors.form && (
-                    <p style={{ color: "red", fontSize: "20px" }}>
-                        {errors.form}
-                    </p>
-                )}
             </main>
         </div>
     );

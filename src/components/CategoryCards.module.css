@@ -14,3 +14,16 @@
     border-color: #7c3aed;
     background-color: #f5f3ff;
 }
+
+
+.wrapperError {
+    border: 1px solid #fa5252;
+}
+
+
+.errorText {
+    color: #fa5252;
+    text-align: left;
+    padding-left: 10px;
+    font-size: 12px;
+}

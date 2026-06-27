@@ -35,7 +35,7 @@ Before running this project, ensure you have the following installed:
 
 ## Installation & Setup
 
-1. Download the project
+#### 1. Download the project
 
 You first need to copy the project onto your computer.
 
@@ -45,7 +45,7 @@ git clone https://github.com/destinyiyamu13/CFG-Group-5.git
 Then move into the project folder:
 cd CFG-Group-5
 
-2. Install backend dependencies
+#### 2. Install backend dependencies
 
 Go into the backend folder:
 cd backend/
@@ -53,45 +53,56 @@ cd backend/
 Install dependencies:
 npm install
 
-3. Set up environment variables (backend)
+#### 3. Set up environment variables (backend)
+
 Inside the backend folder, create a file called:
 .env
 
 Add the following (replace values with your own MySQL details):
+```
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_mysql_password
 DB_NAME=clinics_database
 DB_PORT=3306
+```
 
-4. Set up the database (MySQL)
+#### 4. Set up the database (MySQL)
+
 Make sure MySQL is running on your machine.
 
 Import the provided .sql file:
+
 Open the file in your database tool
+
 Run it to create the database (clinics_database), create tables and insert data
 
 Once this is done, your database is ready.
 
-5. Start the backend server
+#### 5. Start the backend server
 In the backend folder, run:
 npm start
 
 If successful, you should see something like:
 
 Server running on http://localhost:3000
+
 Connected to MySQL database
 
-6. Install frontend dependencies
+#### 6. Install frontend dependencies
+
 The frontend is located in the project root.
 
 Open a new terminal window and check that you're in the project root (keep backend terminal running):
+
 cd CFG-Group-5
 
 Install dependencies:
+
 npm install
 
-7. Start the frontend application
+#### 7. Start the frontend application
+
 Run: npm run dev
 
 You will see something like:
@@ -100,11 +111,12 @@ Local: http://localhost:5173/
 
 Open that link in your browser.
 
-8. Using the application
+#### 8. Using the application
 
 Once both servers are running:
 
 Backend: http://localhost:3000
+
 Frontend: http://localhost:5173
 
 You can now:

@@ -1,7 +1,7 @@
 import { Text, Paper, SimpleGrid } from '@mantine/core';
 import classes from './CategoryCards.module.css';
 
-export default function CategoryCards({ category, setCategory }) {
+export default function CategoryCards({ category, setCategory, error }) {
     const categories = [
         { id: 100, name: "General Women's Health", description: "GP services, routine check-ups, and general health concerns" },
         { id: 101, name: "Family Planning & Contraception", description: "Support with contraception, pregnancy planning, and reproductive choices" },
@@ -16,7 +16,7 @@ export default function CategoryCards({ category, setCategory }) {
             withBorder
             radius="md"
             p="lg"
-            className={classes.wrapper}
+            className={`${classes.wrapper} ${error ? classes.wrapperError : ''}`}
         >
             <Text mb="sm" size="sm" ta="left">
                 What brings you here today?
@@ -40,6 +40,11 @@ export default function CategoryCards({ category, setCategory }) {
                     </Paper>
                 ))}
             </SimpleGrid>
+            {error && (
+                <Text className={classes.errorText} mt="xs">
+                    {error}
+                </Text>
+            )}
         </Paper>
     );
 }

@@ -142,6 +142,7 @@ export default function SearchForm({ onSearch }) {
                 <CategoryCards
                     category={category}
                     setCategory={setCategory}
+                    error={errors.category}
                 />
 
                 {/* Provider */}
@@ -163,7 +164,7 @@ export default function SearchForm({ onSearch }) {
                                 radius="md"
                                 onClick={() => {
                                     setProviderType(option.value);
-                                    setErrors(prev => ({ ...prev, category: "" }));
+                                    setErrors(prev => ({ ...prev, provider: "" }));
                                 }}
                                 className={`${searchFormClasses.card} ${providerType === option.value ? searchFormClasses.selected : ""
                                     }`}

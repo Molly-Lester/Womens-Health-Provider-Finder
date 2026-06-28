@@ -1,0 +1,132 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.title {
+  text-align: center;
+  font-size: 34px;
+  font-weight: 500;
+  color: #2b2b2b;
+  margin-bottom: 36px;
+}
+
+.resultsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.clinicCard {
+  list-style: none;
+  width: 100%;
+
+  background: #ffffff;
+  border: 1px solid #d6d9df;
+  border-radius: 14px;
+
+  padding: 32px 36px;
+
+  color: #495057;
+  font-size: 15px;
+  line-height: 1.7;
+  text-align: left;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.clinicCard:hover {
+  transform: translateY(-4px);
+
+  background: #fdf9ff;
+  border-color: #d8b4fe;
+
+  box-shadow: 0 10px 24px rgba(216, 180, 254, 0.22);
+}
+
+.clinicCard strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 500;
+  color: #2f2f2f;
+  margin-bottom: 12px;
+  transition: color 0.2s ease;
+}
+
+.clinicCard:hover strong {
+  color: #a855f7;
+}
+
+.clinicCard a {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 12px 18px;
+
+  background: #111;
+  color: white;
+
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+
+  border-radius: 10px;
+
+  transition: all 0.2s ease;
+}
+
+.clinicCard a:hover {
+  background: #222;
+  transform: translateY(-2px);
+}
+
+.button {
+  margin-top: 32px;
+  padding: 12px 18px;
+
+  background: #111;
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background: #222;
+  transform: translateY(-2px);
+}
+
+.empty {
+  max-width: 700px;
+  margin: 80px auto;
+  padding: 24px;
+  text-align: center;
+}
+
+.empty h2 {
+  margin-bottom: 12px;
+  color: #2b2b2b;
+  font-weight: 500;
+}
+
+.empty p {
+  color: #6b7280;
+  line-height: 1.6;
+}

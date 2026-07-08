@@ -40,10 +40,10 @@ Before running this project, ensure you have the following installed:
 You first need to copy the project onto your computer.
 
 Open a terminal and run:
-git clone https://github.com/destinyiyamu13/CFG-Group-5.git
+git clone git@github.com:destinyiyamu13/Health-Clinic-Finder.git
 
 Then move into the project folder:
-cd CFG-Group-5
+cd Health-Clinic-Finder
 
 #### 2. Install backend dependencies
 
@@ -95,7 +95,7 @@ The frontend is located in the project root.
 
 Open a new terminal window and check that you're in the project root (keep backend terminal running):
 
-cd CFG-Group-5
+cd Health-Clinic-Finder
 
 Install dependencies:
 

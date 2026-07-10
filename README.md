@@ -40,10 +40,10 @@ Before running this project, ensure you have the following installed:
 You first need to copy the project onto your computer.
 
 Open a terminal and run:
-git clone git@github.com:destinyiyamu13/Health-Clinic-Finder.git
+git clone git@github.com:destinyiyamu13/Womens-Health-Clinic-Finder.git
 
 Then move into the project folder:
-cd Health-Clinic-Finder
+cd Womens-Health-Clinic-Finder
 
 #### 2. Install backend dependencies
 
@@ -95,7 +95,7 @@ The frontend is located in the project root.
 
 Open a new terminal window and check that you're in the project root (keep backend terminal running):
 
-cd Health-Clinic-Finder
+cd Womens-Health-Clinic-Finder
 
 Install dependencies:
 

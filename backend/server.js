@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
+const db = new Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -18,13 +18,13 @@ const db = mysql.createConnection({
     port: process.env.DB_PORT
 });
 
-db.connect((err) => {
-    if (err) {
+db.connect()
+    .then(() => {
+        console.log('Connected to PostgreSQL database');
+    })
+    .catch((err) => {
         console.log('DB connection failed:', err);
-    } else {
-        console.log('Connected to MySQL database');
-    }
-});
+    });
 
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
@@ -68,130 +68,234 @@ async function getCoordinates(postcode) {
     };
 }
 
-// Query that gets all clinics (for testing purposes)
-app.get('/clinics', (req, res) => {
-    db.query('SELECT * FROM clinics', (err, results) => {
-        if (err) {
-            return res.status(500).json(err);
-        }
-        res.json(results);
-    });
+
+// Get all providers
+// Used for testing the database connection
+
+app.get('/clinics', async (req, res) => {
+
+    try {
+
+        const result = await db.query(`
+            SELECT
+                p.provider_id,
+                p.provider_name,
+                p.provider_type,
+                p.website,
+                p.phone_number,
+                l.city,
+                l.postcode,
+                l.latitude,
+                l.longitude
+
+            FROM providers p
+
+            JOIN locations l
+            ON p.provider_id = l.provider_id;
+        `);
+
+
+        res.json(result.rows);
+
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            error: "Could not retrieve providers"
+        });
+
+    }
+
 });
 
 // API using postcodes.io takes user postcode and returns the latitude and longitude 
 app.get('/geocode', async (req, res) => {
+
     const postcode = req.query.postcode;
 
+
     if (!postcode) {
-        return res.status(400).json({ error: "Postcode is required" });
-    }
 
-    try {
-        const response = await fetch(
-            `https://api.postcodes.io/postcodes/${encodeURIComponent(postcode)}`
-        );
-
-        const data = await response.json();
-
-        if (data.status !== 200) {
-            return res.status(404).json({ error: "Postcode not found" });
-        }
-
-        const result = data.result;
-
-        res.json({
-            latitude: result.latitude,
-            longitude: result.longitude
+        return res.status(400).json({
+            error: "Postcode is required"
         });
 
-    } catch (err) {
-        res.status(500).json({ error: "Geocoding failed", details: err.message });
     }
+
+
+    try {
+
+        const coordinates = await getCoordinates(postcode);
+
+        res.json(coordinates);
+
+
+    } catch (error) {
+
+        res.status(404).json({
+            error: error.message
+        });
+
+    }
+
 });
 
 
 // Query that gets clinics filtering by user postcode, radius, condition (concern_id) and provider type (clinic_type)
-app.get('/clinics/nearby', async (req, res) => {
-    const { postcode, radius, concern_id, clinic_type } = req.query;
+// Find providers near a postcode
+// Filters by service, provider type and distance
 
-    if (!postcode || !radius || !concern_id || !clinic_type) {
+app.get('/clinics/nearby', async (req, res) => {
+
+    const {
+        postcode,
+        radius,
+        service_id,
+        provider_type
+    } = req.query;
+
+
+    // Check required information exists
+    if (!postcode || !radius || !service_id) {
+
         return res.status(400).json({
-            error: "postcode, radius, concern_id and clinic_type are required"
+            error: "postcode, radius and service_id are required"
         });
+
     }
+
 
     try {
-        // 1. Convert postcode to coordinates
-        const geoResponse = await fetch(
-            `https://api.postcodes.io/postcodes/${encodeURIComponent(postcode)}`
-        );
 
-        const geoData = await geoResponse.json();
+        // 1. Convert user postcode to coordinates
 
-        if (geoData.status !== 200) {
-            return res.status(404).json({ error: "Invalid postcode" });
-        }
+        const userLocation = await getCoordinates(postcode);
 
-        const userLat = geoData.result.latitude;
-        const userLng = geoData.result.longitude;
+        const userLat = userLocation.latitude;
+        const userLng = userLocation.longitude;
 
-        // 2. Build SQL query (category + provider type filtering)
-        // distinct ensures that a clinic only appears once when using joins
-        let sql = `
-            SELECT DISTINCT c.*
-            FROM clinics c
-            JOIN clinic_concerns cc ON c.clinic_id = cc.clinic_id
-            WHERE cc.concern_id = ?
+        // 2. Find matching providers
+
+        let query = `
+
+            SELECT
+                p.provider_id,
+                p.provider_name,
+                p.provider_type,
+                p.website,
+                p.phone_number,
+
+                l.address_line,
+                l.city,
+                l.postcode,
+                l.latitude,
+                l.longitude,
+
+                s.service_name
+
+            FROM providers p
+
+
+            JOIN locations l
+            ON p.provider_id = l.provider_id
+
+
+            JOIN provider_services ps
+            ON p.provider_id = ps.provider_id
+
+
+            JOIN services s
+            ON ps.service_id = s.service_id
+
+
+            WHERE ps.service_id = $1
+
         `;
 
-        const params = [concern_id];
 
-        // Only filter by NHS/Private if the user selected one (skip if "all")
-        if (clinic_type && clinic_type !== "all") {
-            sql += " AND c.clinic_type = ?";
-            params.push(clinic_type);
+        const values = [service_id];
+
+
+        // Optional NHS/private filter
+
+        if (provider_type && provider_type !== "all") {
+
+            query += `
+                AND p.provider_type = $2
+            `;
+
+            values.push(provider_type);
+
         }
 
-        // 3. Get matching clinics from DB
-        db.query(sql, params, (err, clinics) => {
-            if (err) {
-                return res.status(500).json(err);
+
+
+        const result = await db.query(query, values);
+
+        // 3. Apply radius filter
+
+        let radiusMiles;
+
+
+        if (radius === "all") {
+
+            radiusMiles = Infinity;
+
+        } else {
+
+            radiusMiles = Number(radius);
+
+        }
+
+
+
+        const nearbyProviders = result.rows.filter(provider => {
+
+
+            if (!provider.latitude || !provider.longitude) {
+
+                return false;
+
             }
 
-            // 4. Handle radius 
 
-            // If the user selects "Anywhere in the UK", don't apply a distance limit.
-            // Otherwise convert the selected radius(e.g. "5", "10", "25") into a number.
-            let radiusMiles;
+            const distance = getDistanceMiles(
 
-            if (radius === "all") {
-                radiusMiles = Infinity;
-            } else {
-                radiusMiles = Number(radius);
-            }
+                userLat,
+                userLng,
 
-            // 5. Distance filter
-            const nearby = clinics.filter(clinic => {
-                if (!clinic.latitude || !clinic.longitude) return false;
+                Number(provider.latitude),
+                Number(provider.longitude)
 
-                const distance = getDistanceMiles(
-                    userLat,
-                    userLng,
-                    clinic.latitude,
-                    clinic.longitude
-                );
+            );
 
-                return distance <= radiusMiles;
-            });
 
-            // 6. Return results
-            res.json(nearby);
+            return distance <= radiusMiles;
+
+
         });
 
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
+        // 4. Return results
 
+        res.json(nearbyProviders);
+
+
+    } catch (error) {
+
+
+        console.log(error);
+
+
+        res.status(500).json({
+
+            error: "Could not find nearby providers"
+
+        });
+
+    }
+
+});
 
 

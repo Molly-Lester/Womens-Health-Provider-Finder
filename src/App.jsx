@@ -24,7 +24,7 @@ export default function App() {
           }}
         >
           <Loader size="lg" />
-          <p>Finding clinics...</p>
+          <p>Finding providers...</p>
         </Center>
       )}
 

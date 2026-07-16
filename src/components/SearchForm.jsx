@@ -47,12 +47,12 @@ export default function SearchForm({ onSearch, setLoading }) {
             const params = new URLSearchParams({
                 postcode,
                 radius,
-                concern_id: category,
-                clinic_type: providerType,
+                service_id: category,
+                provider_type: providerType,
             });
 
             const response = await fetch(
-                `http://localhost:3000/clinics/nearby?${params.toString()}`
+                `http://localhost:3000/providers/nearby?${params.toString()}`
             );
 
             const data = await response.json();
@@ -78,7 +78,7 @@ export default function SearchForm({ onSearch, setLoading }) {
         } catch (err) {
             setErrors(prev => ({
                 ...prev,
-                form: "Failed to fetch clinics"
+                form: "Failed to fetch providers"
             }));
             showNotification({
                 title: "Network error",
@@ -93,7 +93,7 @@ export default function SearchForm({ onSearch, setLoading }) {
     return (
         <div className="search-page">
             <header className="header">
-                <h1>Women's Health Clinic Finder</h1>
+                <h1>Women's Health Provider Finder</h1>
 
                 <p className="header-subtitle">
                     Helping you find the right women’s health support by filtering local services based on what you need.
@@ -173,9 +173,9 @@ export default function SearchForm({ onSearch, setLoading }) {
 
                     <SimpleGrid cols={{ base: 1, sm: 3 }}>
                         {[
-                            { value: "all", label: "All services" },
-                            { value: "nhs", label: "NHS" },
-                            { value: "private", label: "Private" },
+                            { value: "all", label: "All providers" },
+                            { value: "NHS Service", label: "NHS" },
+                            { value: "Private Clinic", label: "Private" },
                         ].map((option) => (
                             <Paper
                                 key={option.value}

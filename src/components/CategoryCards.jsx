@@ -3,12 +3,24 @@ import classes from './CategoryCards.module.css';
 
 export default function CategoryCards({ category, setCategory, error }) {
     const categories = [
-        { id: 100, name: "General Women's Health", description: "GP services, routine check-ups, and general health concerns" },
-        { id: 101, name: "Family Planning & Contraception", description: "Support with contraception, pregnancy planning, and reproductive choices" },
-        { id: 102, name: "Sexual Health", description: "Testing, treatment, and advice for sexual health and wellbeing" },
-        { id: 103, name: "Fertility Support", description: "Help with fertility concerns, testing, and treatment options" },
-        { id: 104, name: "Pregnancy & Maternity Care", description: "Support during pregnancy, antenatal care, and postnatal services" },
-        { id: 105, name: "Menopause Support", description: "Advice and treatment for menopause symptoms and hormonal changes" },
+        {
+            id: 1, name: "Fertility Support", description: "Help with fertility concerns, testing, and treatment options"
+        },
+        {
+            id: 2, name: "Menopause Support", description: "Advice and treatment for menopause symptoms and hormonal changes"
+        },
+        {
+            id: 3, name: "Sexual Health", description: "Testing, treatment, and advice for sexual health and wellbeing"
+        },
+        {
+            id: 4, name: "Contraception", description: "Support with contraception and reproductive choices"
+        },
+        {
+            id: 5, name: "Pregnancy and Maternity", description: "Support during pregnancy, antenatal care, and postnatal services"
+        },
+        {
+            id: 6, name: "Women's General Health", description: "GP services, routine check-ups, and general health concerns"
+        },
     ];
 
     return (

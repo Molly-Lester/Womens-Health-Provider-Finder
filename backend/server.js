@@ -72,7 +72,7 @@ async function getCoordinates(postcode) {
 // Get all providers
 // Used for testing the database connection
 
-app.get('/clinics', async (req, res) => {
+app.get('/providers', async (req, res) => {
 
     try {
 
@@ -142,12 +142,10 @@ app.get('/geocode', async (req, res) => {
 
 });
 
+// Find providers near a user's postcode.
+// Filters by service, provider type and search radius.
 
-// Query that gets clinics filtering by user postcode, radius, condition (concern_id) and provider type (clinic_type)
-// Find providers near a postcode
-// Filters by service, provider type and distance
-
-app.get('/clinics/nearby', async (req, res) => {
+app.get('/providers/nearby', async (req, res) => {
 
     const {
         postcode,
@@ -166,78 +164,75 @@ app.get('/clinics/nearby', async (req, res) => {
 
     }
 
-
     try {
 
-        // 1. Convert user postcode to coordinates
+        // 1. Convert the user's postcode into coordinates
 
         const userLocation = await getCoordinates(postcode);
 
         const userLat = userLocation.latitude;
         const userLng = userLocation.longitude;
 
-        // 2. Find matching providers
+
+        // 2. Find providers that offer the selected service
 
         let query = `
 
-            SELECT
-                p.provider_id,
-                p.provider_name,
-                p.provider_type,
-                p.website,
-                p.phone_number,
+        SELECT
+            p.provider_id,
+            p.provider_name,
+            p.provider_type,
+            p.website,
+            p.phone_number,
 
-                l.address_line,
-                l.city,
-                l.postcode,
-                l.latitude,
-                l.longitude,
+            l.address_line,
+            l.city,
+            l.postcode,
+            l.latitude,
+            l.longitude,
 
-                s.service_name
+            s.service_name
 
-            FROM providers p
+        FROM providers p
 
+        JOIN locations l
+        ON p.provider_id = l.provider_id
 
-            JOIN locations l
-            ON p.provider_id = l.provider_id
+        JOIN provider_services ps
+        ON p.provider_id = ps.provider_id
 
+        JOIN services s
+        ON ps.service_id = s.service_id
 
-            JOIN provider_services ps
-            ON p.provider_id = ps.provider_id
+        WHERE ps.service_id = $1
 
-
-            JOIN services s
-            ON ps.service_id = s.service_id
-
-
-            WHERE ps.service_id = $1
-
-        `;
+    `;
 
 
-        const values = [service_id];
+        const queryValues = [service_id];
 
 
-        // Optional NHS/private filter
+        // Only filter by provider type if the user selected NHS or Private
 
         if (provider_type && provider_type !== "all") {
 
             query += `
-                AND p.provider_type = $2
-            `;
+            AND p.provider_type = $2
+        `;
 
-            values.push(provider_type);
+            queryValues.push(provider_type);
 
         }
 
 
+        // 3. Run the query
 
-        const result = await db.query(query, values);
+        const result = await db.query(query, queryValues);
 
-        // 3. Apply radius filter
+
+        // 4. Convert the selected radius into miles
 
         let radiusMiles;
-
 
         if (radius === "all") {
 
@@ -250,52 +245,51 @@ app.get('/clinics/nearby', async (req, res) => {
         }
 
 
+        // 5. Calculate the distance from the user to each provider
 
-        const nearbyProviders = result.rows.filter(provider => {
+        const nearbyProviders = result.rows
+
+            .map(provider => {
+
+                const distance = getDistanceMiles(
+
+                    userLat,
+                    userLng,
+
+                    Number(provider.latitude),
+                    Number(provider.longitude)
+
+                );
+
+                return {
+
+                    ...provider,
+
+                    distance: Number(distance.toFixed(1))
+
+                };
+
+            })
+
+            .filter(provider => provider.distance <= radiusMiles);
 
 
-            if (!provider.latitude || !provider.longitude) {
+        // 6. Show the closest providers first
 
-                return false;
-
-            }
+        nearbyProviders.sort((a, b) => a.distance - b.distance);
 
 
-            const distance = getDistanceMiles(
-
-                userLat,
-                userLng,
-
-                Number(provider.latitude),
-                Number(provider.longitude)
-
-            );
-
-
-            return distance <= radiusMiles;
-
-
-        });
-
-        // 4. Return results
+        // 7. Return the providers
 
         res.json(nearbyProviders);
 
-
     } catch (error) {
-
 
         console.log(error);
 
-
         res.status(500).json({
-
-            error: "Could not find nearby providers"
-
+            error: "Invalid postcode"
         });
 
     }
-
 });
-
-

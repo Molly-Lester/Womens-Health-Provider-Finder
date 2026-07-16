@@ -17,34 +17,38 @@ export default function ResultsPage({ searchData }) {
 
   return (
     <div className={classes.container}>
-      <h2 className={classes.title}>Women's Health Clinics Near You</h2>
+      <h2 className={classes.title}>Women's Health Providers Near You</h2>
 
       {searchData.length === 0 && (
         <div>
-          <p>We couldn’t find any clinics matching your search.</p>
+          <p>We couldn’t find any providers matching your search.</p>
           <p>Try adjusting your filters or searching for something else.</p>
         </div>
       )}
 
       {searchData.length > 0 && (
         <ul className={classes.resultsList}>
-          {searchData.map((clinic) => (
-            <li key={clinic.clinic_id} className={classes.clinicCard}>
+          {searchData.map((provider) => (
+            <li key={provider.provider_id} className={classes.clinicCard}>
               <strong className={classes.clinicName}>
-                {clinic.clinic_name}
+                {provider.provider_name}
               </strong>{" "}
-              ({clinic.clinic_type})
+              ({provider.provider_type})
               <br />
-              {clinic.address}, {clinic.postcode}
+
+              {provider.address_line}, {provider.city}, {provider.postcode}
+
               <br />
-              {clinic.phone_number && (
+
+              {provider.phone_number && (
                 <span>
-                  {clinic.phone_number}
+                  {provider.phone_number}
                   <br />
                 </span>
               )}
-              {clinic.website && (
-                <a href={clinic.website} target="_blank" rel="noreferrer">
+
+              {provider.website && (
+                <a href={provider.website} target="_blank" rel="noreferrer">
                   Visit website
                 </a>
               )}

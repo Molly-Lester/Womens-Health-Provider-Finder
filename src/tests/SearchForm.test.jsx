@@ -20,9 +20,9 @@ Object.defineProperty(window, "matchMedia", {
 });
 
 global.ResizeObserver = class {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+  observe() { }
+  unobserve() { }
+  disconnect() { }
 };
 
 function renderSearchForm() {
@@ -40,7 +40,7 @@ test("renders the search form heading", () => {
   renderSearchForm();
 
   expect(
-    screen.getByText("Women's Health Clinic Finder")
+    screen.getByText("Women's Health Provider Finder")
   ).toBeInTheDocument();
 });
 

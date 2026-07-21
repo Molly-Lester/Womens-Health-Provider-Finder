@@ -121,25 +121,6 @@ CREATE TABLE provider_services (
 
 );
 
--- Stores provider applications awaiting review before being added to the directory
-
-CREATE TABLE provider_submissions (
-
-    submission_id SERIAL PRIMARY KEY,
-
-    provider_name VARCHAR(255) NOT NULL,
-
-    contact_email VARCHAR(255),
-
-    website VARCHAR(255),
-
-    postcode VARCHAR(10),
-
-    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    status VARCHAR(50) DEFAULT 'Pending'
-
-);
 
 INSERT INTO providers
 (

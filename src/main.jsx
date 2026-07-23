@@ -6,12 +6,16 @@ import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import './index.css';
 import App from './App.jsx';
+import { Provider } from "react-redux";
+import store from "./store";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <MantineProvider>
       <BrowserRouter>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </BrowserRouter>
     </MantineProvider>
   </StrictMode>

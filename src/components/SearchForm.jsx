@@ -4,9 +4,12 @@ import { Paper, Select, Text, SimpleGrid } from "@mantine/core";
 import { showNotification } from '@mantine/notifications';
 import CategoryCards from "./CategoryCards";
 import searchFormClasses from './SearchForm.module.css';
+import { useDispatch } from "react-redux";
+import { setLoading } from "../features/search/searchSlice";
 
-export default function SearchForm({ onSearch, setLoading }) {
+export default function SearchForm({ onSearch }) {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [postcode, setPostcode] = useState("");
     const [radius, setRadius] = useState("5");
     const [category, setCategory] = useState(null);
@@ -38,7 +41,7 @@ export default function SearchForm({ onSearch, setLoading }) {
 
         if (hasError) return;
 
-        setLoading(true);
+        dispatch(setLoading(true));
 
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
         await sleep(1000);
@@ -86,7 +89,7 @@ export default function SearchForm({ onSearch, setLoading }) {
                 color: "red",
             });
         } finally {
-            setLoading(false);
+            dispatch(setLoading(false));
         }
     };
 
@@ -205,5 +208,5 @@ export default function SearchForm({ onSearch, setLoading }) {
                 </button>
             </main>
         </div>
-    );
-}
+    )
+};

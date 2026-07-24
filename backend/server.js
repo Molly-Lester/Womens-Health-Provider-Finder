@@ -1,50 +1,17 @@
 const express = require('express');
 const cors = require('cors');
 const db = require("./db/database");
+const getDistanceMiles = require("./utils/distance");
+const getCoordinates = require("./utils/geocode");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// Harvesine formula to calculate distance between user and clinics using coordinates
-function getDistanceMiles(lat1, lon1, lat2, lon2) {
-    const R = 3958.8;
-
-    const toRad = (v) => (v * Math.PI) / 180;
-
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-
-    const a =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos(toRad(lat1)) *
-        Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) ** 2;
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return R * c;
-}
-
-
-async function getCoordinates(postcode) {
-    const response = await fetch(
-        `https://api.postcodes.io/postcodes/${encodeURIComponent(postcode)}`
-    );
-
-    const data = await response.json();
-
-    if (data.status !== 200) {
-        throw new Error("Invalid postcode");
-    }
-
-    return {
-        latitude: data.result.latitude,
-        longitude: data.result.longitude
-    };
-}
-
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
 
 // Get all providers
 // Used for testing the database connection

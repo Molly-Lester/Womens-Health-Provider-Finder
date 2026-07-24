@@ -1,34 +1,11 @@
 const express = require('express');
-const { Pool } = require('pg');
 const cors = require('cors');
-const dotenv = require('dotenv');
-
-dotenv.config();
+const db = require("./db/database");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-const db = new Pool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT
-});
-
-db.connect()
-    .then(() => {
-        console.log('Connected to PostgreSQL database');
-    })
-    .catch((err) => {
-        console.log('DB connection failed:', err);
-    });
-
-app.listen(3000, () => {
-    console.log('Server running on http://localhost:3000');
-});
 
 // Harvesine formula to calculate distance between user and clinics using coordinates
 function getDistanceMiles(lat1, lon1, lat2, lon2) {

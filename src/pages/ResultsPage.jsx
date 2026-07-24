@@ -1,19 +1,13 @@
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { clearResults } from "../features/search/searchSlice";
 import classes from "./ResultsPage.module.css";
 
-export default function ResultsPage({ searchData }) {
+
+export default function ResultsPage() {
   const navigate = useNavigate();
-
-  if (!searchData) {
-    return (
-      <div className="results-empty">
-        <h2>No search found</h2>
-        <p>Please complete a search to view nearby services.</p>
-
-        <button onClick={() => navigate("/")}>Back to search</button>
-      </div>
-    );
-  }
+  const dispatch = useDispatch();
+  const searchData = useSelector((state) => state.search.results);
 
   return (
     <div className={classes.container}>
@@ -57,9 +51,16 @@ export default function ResultsPage({ searchData }) {
         </ul>
       )}
 
-      <button className={classes.button} onClick={() => navigate("/")}>
+      <button
+        className={classes.button}
+        onClick={() => {
+          dispatch(clearResults());
+          navigate("/");
+        }}
+      >
         New Search
       </button>
+
     </div>
   );
 }

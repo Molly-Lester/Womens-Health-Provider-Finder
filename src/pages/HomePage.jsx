@@ -1,10 +1,10 @@
 import { Container } from '@mantine/core';
 import SearchForm from "../components/SearchForm";
 
-export default function HomePage({ setSearchData }) {
+export default function HomePage() {
     return (
         <Container size="lg">
-            <SearchForm onSearch={setSearchData} />
+            <SearchForm />
         </Container>
     );
 }

@@ -1,15 +1,13 @@
-import { useState } from "react";
 import { Loader, Center } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom';
 import { useSelector } from "react-redux";
-import "./App.css"
+import "./App.css";
 
-import HomePage from "./pages/HomePage"
-import ResultsPage from "./pages/ResultsPage"
+import HomePage from "./pages/HomePage";
+import ResultsPage from "./pages/ResultsPage";
 
 export default function App() {
-  const [searchData, setSearchData] = useState(null);
   const loading = useSelector((state) => state.search.loading);
 
   return (
@@ -33,15 +31,11 @@ export default function App() {
       <Routes>
         <Route
           path="/"
-          element={
-            <HomePage
-              setSearchData={setSearchData}
-            />
-          }
+          element={<HomePage />}
         />
         <Route
           path="/results"
-          element={<ResultsPage searchData={searchData} />}
+          element={<ResultsPage />}
         />
       </Routes>
     </>

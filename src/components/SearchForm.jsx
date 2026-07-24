@@ -5,9 +5,9 @@ import { showNotification } from '@mantine/notifications';
 import CategoryCards from "./CategoryCards";
 import searchFormClasses from './SearchForm.module.css';
 import { useDispatch } from "react-redux";
-import { setLoading } from "../features/search/searchSlice";
+import { setLoading, setResults } from "../features/search/searchSlice";
 
-export default function SearchForm({ onSearch }) {
+export default function SearchForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [postcode, setPostcode] = useState("");
@@ -75,7 +75,7 @@ export default function SearchForm({ onSearch }) {
                 return;
             }
 
-            onSearch(data);
+            dispatch(setResults(data));
             navigate("/results");
 
         } catch (err) {

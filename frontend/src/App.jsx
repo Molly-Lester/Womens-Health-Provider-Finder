@@ -30,18 +30,14 @@ export default function App() {
 
       <Navbar />
 
-      <Notifications position="top-right" />
-      <Routes>
-        <Route
-          path="/"
-          element={<HomePage />}
-        />
-        <Route
-          path="/results"
-          element={<ResultsPage />}
-        />
-      </Routes>
+      <main className="app-content">
+        <Notifications position="top-right" />
+
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/results" element={<ResultsPage />} />
+        </Routes>
+      </main>
     </>
   );
 }
-

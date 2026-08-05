@@ -14,10 +14,41 @@ export default function Navbar() {
             </NavLink>
 
             <div className={styles.links}>
-                <NavLink className={styles.link} to="/">Find a Provider</NavLink>
-                <NavLink className={styles.link} to="/resources">Resources</NavLink>
-                <NavLink className={styles.link} to="/about">About</NavLink>
+                <NavLink
+                    className={({ isActive }) =>
+                        isActive
+                            ? `${styles.link} ${styles.active}`
+                            : styles.link
+                    }
+                    to="/"
+                    end
+                >
+                    Find a Provider
+                </NavLink>
+
+                <NavLink
+                    className={({ isActive }) =>
+                        isActive
+                            ? `${styles.link} ${styles.active}`
+                            : styles.link
+                    }
+                    to="/resources"
+                >
+                    Resources
+                </NavLink>
+
+                <NavLink
+                    className={({ isActive }) =>
+                        isActive
+                            ? `${styles.link} ${styles.active}`
+                            : styles.link
+                    }
+                    to="/about"
+                >
+                    About
+                </NavLink>
             </div>
         </nav>
     );
 }
+

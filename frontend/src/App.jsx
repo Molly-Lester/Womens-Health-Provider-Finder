@@ -6,6 +6,7 @@ import "./App.css";
 
 import HomePage from "./pages/HomePage";
 import ResultsPage from "./pages/ResultsPage";
+import Navbar from "./components/Navbar";
 
 export default function App() {
   const loading = useSelector((state) => state.search.loading);
@@ -26,6 +27,8 @@ export default function App() {
           <p>Finding providers...</p>
         </Center>
       )}
+
+      <Navbar />
 
       <Notifications position="top-right" />
       <Routes>

@@ -5,48 +5,44 @@ import styles from "./Navbar.module.css";
 export default function Navbar() {
     return (
         <nav className={styles.navbar}>
-            <NavLink to="/">
-                <img
-                    src={logo}
-                    alt="Clinic Finder logo"
-                    className={styles.logo}
-                />
-            </NavLink>
-
-            <div className={styles.links}>
-                <NavLink
-                    className={({ isActive }) =>
-                        isActive
-                            ? `${styles.link} ${styles.active}`
-                            : styles.link
-                    }
-                    to="/"
-                    end
-                >
-                    Find a Provider
+            <div className={styles.navbarContent}>
+                <NavLink to="/">
+                    <img
+                        src={logo}
+                        alt="Clinic Finder logo"
+                        className={styles.logo}
+                    />
                 </NavLink>
 
-                <NavLink
-                    className={({ isActive }) =>
-                        isActive
-                            ? `${styles.link} ${styles.active}`
-                            : styles.link
-                    }
-                    to="/resources"
-                >
-                    Resources
-                </NavLink>
+                <div className={styles.links}>
+                    <NavLink
+                        to="/"
+                        end
+                        className={({ isActive }) =>
+                            isActive ? `${styles.link} ${styles.active}` : styles.link
+                        }
+                    >
+                        Find a Provider
+                    </NavLink>
 
-                <NavLink
-                    className={({ isActive }) =>
-                        isActive
-                            ? `${styles.link} ${styles.active}`
-                            : styles.link
-                    }
-                    to="/about"
-                >
-                    About
-                </NavLink>
+                    <NavLink
+                        to="/resources"
+                        className={({ isActive }) =>
+                            isActive ? `${styles.link} ${styles.active}` : styles.link
+                        }
+                    >
+                        Resources
+                    </NavLink>
+
+                    <NavLink
+                        to="/about"
+                        className={({ isActive }) =>
+                            isActive ? `${styles.link} ${styles.active}` : styles.link
+                        }
+                    >
+                        About
+                    </NavLink>
+                </div>
             </div>
         </nav>
     );

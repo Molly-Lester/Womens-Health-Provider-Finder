@@ -96,7 +96,7 @@ export default function SearchForm() {
     return (
         <div className="search-page">
             <header className="header">
-                <h1>Women's Health Provider Finder</h1>
+                <h1>Women's Healthcare Finder</h1>
 
                 <p className="header-subtitle">
                     Helping you find the right women’s health support by filtering local services based on what you need.

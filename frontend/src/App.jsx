@@ -6,6 +6,7 @@ import "./App.css";
 
 import HomePage from "./pages/HomePage";
 import ResultsPage from "./pages/ResultsPage";
+import Navbar from "./components/Navbar";
 
 export default function App() {
   const loading = useSelector((state) => state.search.loading);
@@ -27,18 +28,16 @@ export default function App() {
         </Center>
       )}
 
-      <Notifications position="top-right" />
-      <Routes>
-        <Route
-          path="/"
-          element={<HomePage />}
-        />
-        <Route
-          path="/results"
-          element={<ResultsPage />}
-        />
-      </Routes>
+      <Navbar />
+
+      <main className="app-content">
+        <Notifications position="top-right" />
+
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/results" element={<ResultsPage />} />
+        </Routes>
+      </main>
     </>
   );
 }
-

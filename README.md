@@ -1,8 +1,8 @@
-# Women's Health Provider Finder
+# Women's Healthcare Finder
 
 ## Overview
 
-Women's Health Provider Finder is a full-stack web application designed to make it easier for women and adolescent girls to find the healthcare services they need.
+Women's Healthcare Finder is a full-stack web application designed to make it easier for women and adolescent girls to find the health services they need.
 
 Finding the right healthcare support can be difficult, especially when comparing different services, locations, and provider types. This project aims to simplify that process by allowing users to search for nearby women's healthcare providers based on their postcode, the type of support they need, and whether they're looking for NHS or private services.
 

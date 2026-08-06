@@ -26,3 +26,13 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
+.app-content {
+  width: 1126px;
+  max-width: 100%;
+  margin: 0 auto;
+  background-color: white;
+  min-height: calc(100vh - 70px);
+  padding-bottom: 40px;
+  box-sizing: border-box;
+}

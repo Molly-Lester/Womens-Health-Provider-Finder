@@ -1,3 +1,5 @@
+// Converts the users postcode into latitude and longitude coordinates using the postcodes.io API.
+
 async function getCoordinates(postcode) {
     const response = await fetch(
         `https://api.postcodes.io/postcodes/${encodeURIComponent(postcode)}`
